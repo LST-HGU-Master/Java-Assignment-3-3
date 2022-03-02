@@ -1,14 +1,56 @@
-# Autograding Example: Java
-This example project is written in Java, and tested with Gradle/JUnit.
+# 課題 3-3
+多重ループ
 
-### The assignment
-The tests are currently failing because of an output mismatch. Fixing the `System.out.println` in the main method will make the tests green.
+### 課題の説明
+次のプログラムはターミナルを N x N のマス目に見立てて、
+アスタリスク（*）で実行例1のような三角形を描くプログラムである。
+このプログラムを変更し、ターミナルの画面を N x N のマス目に見立てて、
+アスタリクスク（*）とアットマーク（@）を使って実行例2のような四角形を
+描くプログラムを作成しなさい。
+ただし、マス目の数 N は実行時引数として与えることとする。
 
-### Setup command
-N/A
+### プログラムの雛形
+```java
+public class Prog33 {
 
-### Run command
-`gradle test`
+    public static void main(String[] args) {
+        for (int i=0; i<7; i++) {
+            int j;
+            for(j=0; j<=i; j++) {
+                System.out.print("＊");
+            }
+            for(; j<7; j++) {
+                System.out.print("　");
+            }
 
-### Notes
-- The JDK is installed on GitHub Actions machines, so you're also able to directly invoke `javac`, `java`, or any other CLI command included in the JDK. 
+            System.out.println("");
+        }
+    }
+
+}
+```
+
+### 実行例1
+```
+＊　　　　　　
+＊＊　　　　　
+＊＊＊　　　　
+＊＊＊＊　　　
+＊＊＊＊＊　　
+＊＊＊＊＊＊　
+＊＊＊＊＊＊＊
+```
+
+### 実行例2（N=10のとき）
+```
+＊＊＊＊＊＊＊＊＊＊
+＠＊＊＊＊＊＊＊＊＊
+＠＠＊＊＊＊＊＊＊＊
+＠＠＠＊＊＊＊＊＊＊
+＠＠＠＠＊＊＊＊＊＊
+＠＠＠＠＠＊＊＊＊＊
+＠＠＠＠＠＠＊＊＊＊
+＠＠＠＠＠＠＠＊＊＊
+＠＠＠＠＠＠＠＠＊＊
+＠＠＠＠＠＠＠＠＠＊
+```
