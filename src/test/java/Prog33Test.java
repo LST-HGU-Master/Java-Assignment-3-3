@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import java.io.*;
-
+/**
+ * @version (20220509)
+ **/
 public class Prog33Test {
     InputStream originalIn;
     PrintStream originalOut;
@@ -39,7 +41,7 @@ public class Prog33Test {
         // assertion
         String[] prints = bos.toString().split(System.lineSeparator());
         try {
-            assertEquals(100, prints.length,"縦の文字数が実行時引数で与えられた値と一致しません!");
+            assertEquals(100, prints.length,"縦の文字数が実行時引数で与えられた正の数と一致しません!");
         } catch (AssertionError err) {
             after();
             throw err;
@@ -55,7 +57,7 @@ public class Prog33Test {
         // assertion
         String[] prints = bos.toString().split(System.lineSeparator());
         try {
-            assertEquals(130, prints[0].length(),"横の文字数が実行時引数で与えられた値と一致しません!");
+            assertEquals(130, prints[0].length(),"横の文字数が実行時引数で与えられた正の数と一致しません!");
         } catch (AssertionError err) {
             after();
             throw err;
@@ -71,7 +73,8 @@ public class Prog33Test {
         // assertion
         String[] prints = bos.toString().split(System.lineSeparator());
         try {
-            assertFalse(prints[0].contains("@"),"四角形の一番上に＠が含まれています!");
+            assertFalse(prints[0].contains("＠"),"四角形の一番上に＠が含まれています!");
+            assertFalse(prints[0].contains("@"),"四角形の一番上に半角@が含まれています!"); //just in case            
         } catch (AssertionError err) {
             after();
             throw err;
@@ -97,7 +100,7 @@ public class Prog33Test {
             assertEquals(expected[2], prints[2]);
         } catch (AssertionError err) {
             after();
-            AssertionError asErr = new AssertionError("＠と＊はどちらも全角文字であることが必要です!");
+            AssertionError asErr = new AssertionError("＠と＊はどちらも全角文字であることが必要です(最初の行に＠があってはいけません) !");
             throw asErr;
         }
     }
