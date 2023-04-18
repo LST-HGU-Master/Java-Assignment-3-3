@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import java.io.*;
 /**
  * @version (20220509)
+ * @version (20230417)  supporting both println and print("\n") on Windows
  **/
 public class Prog33Test {
     InputStream originalIn;
@@ -21,17 +22,17 @@ public class Prog33Test {
         //modify binding
         bos = new ByteArrayOutputStream();
         System.setOut(new PrintStream(bos));
-        
+
         in = new StandardInputStream();
         System.setIn(in);
     }
-    
+
     @AfterEach
     void after() {
-       System.setOut(originalOut);
-       System.setIn(originalIn);
+        System.setOut(originalOut);
+        System.setIn(originalIn);
     }
-    
+
     @Test
     public void testNumLines()
     {
@@ -39,7 +40,7 @@ public class Prog33Test {
         Prog33.main(new String[]{"100"});
 
         // assertion
-        String[] prints = bos.toString().split(System.lineSeparator());
+        String[] prints = bos.toString().split("\r\n|\n");
         try {
             assertEquals(100, prints.length,"縦の文字数が実行時引数で与えられた正の数と一致しません!");
         } catch (AssertionError err) {
@@ -55,7 +56,7 @@ public class Prog33Test {
         Prog33.main(new String[]{"130"});
 
         // assertion
-        String[] prints = bos.toString().split(System.lineSeparator());
+        String[] prints = bos.toString().split("\r\n|\n");
         try {
             assertEquals(130, prints[0].length(),"横の文字数が実行時引数で与えられた正の数と一致しません!");
         } catch (AssertionError err) {
@@ -71,7 +72,7 @@ public class Prog33Test {
         Prog33.main(new String[]{"28"});
 
         // assertion
-        String[] prints = bos.toString().split(System.lineSeparator());
+        String[] prints = bos.toString().split("\r\n|\n");
         try {
             assertFalse(prints[0].contains("＠"),"四角形の一番上に＠が含まれています!");
             assertFalse(prints[0].contains("@"),"四角形の一番上に半角@が含まれています!"); //just in case            
@@ -92,8 +93,8 @@ public class Prog33Test {
                 "＊＊＊",
                 "＠＊＊",
                 "＠＠＊"
-        };
-        String[] prints = bos.toString().split(System.lineSeparator());
+            };
+        String[] prints = bos.toString().split("\r\n|\n");
         try {
             assertEquals(expected[0], prints[0]);
             assertEquals(expected[1], prints[1]);
