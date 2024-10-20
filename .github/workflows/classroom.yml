@@ -1,0 +1,71 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+    - name: testNumLines
+      id: testnumlines
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testNumLines
+        setup-command: ''
+        command: sudo locale-gen ja_JP.UTF-8 && export LANG=ja_JP.UTF-8 && sudo update-locale
+          && gradle test --tests "Prog33Test.testNumLines"
+        timeout: 10
+        max-score: 3
+    - name: testNumColumns
+      id: testnumcolumns
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testNumColumns
+        setup-command: ''
+        command: sudo locale-gen ja_JP.UTF-8 && export LANG=ja_JP.UTF-8 && sudo update-locale
+          && gradle test --tests "Prog33Test.testNumColumns"
+        timeout: 10
+        max-score: 3
+    - name: testNoAtmarkFirstLine
+      id: testnoatmarkfirstline
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testNoAtmarkFirstLine
+        setup-command: ''
+        command: sudo locale-gen ja_JP.UTF-8 && export LANG=ja_JP.UTF-8 && sudo update-locale
+          && gradle test --tests "Prog33Test.testNoAtmarkFirstLine"
+        timeout: 10
+        max-score: 3
+    - name: testAllOutputs
+      id: testalloutputs
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testAllOutputs
+        setup-command: ''
+        command: sudo locale-gen ja_JP.UTF-8 && export LANG=ja_JP.UTF-8 && sudo update-locale
+          && gradle test --tests "Prog33Test.testAllOutputs"
+        timeout: 10
+        max-score: 3
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TESTNUMLINES_RESULTS: "${{steps.testnumlines.outputs.result}}"
+        TESTNUMCOLUMNS_RESULTS: "${{steps.testnumcolumns.outputs.result}}"
+        TESTNOATMARKFIRSTLINE_RESULTS: "${{steps.testnoatmarkfirstline.outputs.result}}"
+        TESTALLOUTPUTS_RESULTS: "${{steps.testalloutputs.outputs.result}}"
+      with:
+        runners: testnumlines,testnumcolumns,testnoatmarkfirstline,testalloutputs
