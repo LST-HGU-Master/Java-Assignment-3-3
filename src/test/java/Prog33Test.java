@@ -1,5 +1,4 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -7,6 +6,7 @@ import java.io.*;
 /**
  * @version (20220509)
  * @version (20230417)  supporting both println and print("\n") on Windows
+ * @version (20261008)  revised
  **/
 public class Prog33Test {
     InputStream originalIn;
@@ -36,50 +36,31 @@ public class Prog33Test {
     @Test
     public void testNumLines()
     {
-        // action
         Prog33.main(new String[]{"100"});
 
-        // assertion
-        String[] prints = bos.toString().split("\r\n|\n");
-        try {
-            assertEquals(100, prints.length,"縦の文字数が実行時引数で与えられた正の数と一致しません!");
-        } catch (AssertionError err) {
-            after();
-            throw err;
-        }
+        String[] prints = bos.toString().replace("\r\n", "\n").split("\n");
+        assertEquals(100, prints.length, "縦の行数が実行時引数で与えられた数値（N=100）と一致しません!");
     }
 
     @Test
     public void testNumColumns()
     {
-        // action
         Prog33.main(new String[]{"130"});
 
-        // assertion
-        String[] prints = bos.toString().split("\r\n|\n");
-        try {
-            assertEquals(130, prints[0].length(),"横の文字数が実行時引数で与えられた正の数と一致しません!");
-        } catch (AssertionError err) {
-            after();
-            throw err;
-        }        
+        String[] prints = bos.toString().replace("\r\n", "\n").split("\n");
+        assertTrue(prints.length > 0, "出力結果が空です。");
+        assertEquals(130, prints[0].length(), "1行目の横の文字数が実行時引数で与えられた数値（N=130）と一致しません!");
     }
 
     @Test
     public void testNoAtmarkFirstLine()
     {
-        // action
         Prog33.main(new String[]{"28"});
 
-        // assertion
-        String[] prints = bos.toString().split("\r\n|\n");
-        try {
-            assertFalse(prints[0].contains("＠"),"四角形の一番上に＠が含まれています!");
-            assertFalse(prints[0].contains("@"),"四角形の一番上に半角@が含まれています!"); //just in case            
-        } catch (AssertionError err) {
-            after();
-            throw err;
-        }        
+        String[] prints = bos.toString().replace("\r\n", "\n").split("\n");
+        assertTrue(prints.length > 0, "出力結果が空です。");
+        assertFalse(prints[0].contains("＠"), "四角形の一番上（1行目）に全角の「＠」が含まれています!");
+        assertFalse(prints[0].contains("@"), "四角形の一番上（1行目）に半角の「@」が含まれています!");
     }
 
     @Test
@@ -94,15 +75,15 @@ public class Prog33Test {
                 "＠＊＊",
                 "＠＠＊"
             };
-        String[] prints = bos.toString().split("\r\n|\n");
-        try {
-            assertEquals(expected[0], prints[0]);
-            assertEquals(expected[1], prints[1]);
-            assertEquals(expected[2], prints[2]);
-        } catch (AssertionError err) {
-            after();
-            AssertionError asErr = new AssertionError("＠と＊はどちらも全角文字であることが必要です(最初の行に＠があってはいけません) !");
-            throw asErr;
+            
+        String[] prints = bos.toString().replace("\r\n", "\n").split("\n");
+
+        assertEquals(expected.length, prints.length, "N=3 の場合の出力行数が3行になっていません。");
+
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i], prints[i], 
+                (i + 1) + "行目の出力が異なります（「＠」と「＊」は全角文字を使用し、1行目に「＠」が含まれないようにしてください）。"
+            );
         }
     }
 }
